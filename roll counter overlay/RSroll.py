@@ -1,4 +1,19 @@
 import tkinter as tk
+"""
+Copyright (C) 2023 eXtremeVisionGaming # EMAIL: west@extremevisiongaming.com
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>."""
 
 class OverlayWindow:
     def __init__(self, root):
@@ -115,26 +130,30 @@ class OverlayWindow:
         self.bet = self.starting_bet
         self.total_cost = 0
         self.profit = 0
+        self.odds = 2.7
         self.update_counter_label()
         self.increment_button.config(text=f"Bet: {format(self.bet, ',')} GP")
+        
 
 
     def update_counter_label(self):
-        self.counter_label.config(text=f"Total bets: {format(self.counter, ',')} | Total cost: {format(self.total_cost, ',')} GP\nSets of {self.set_limit}: {format(self.sets, ',')} | Profit: {format(self.profit, ',')} GP")
+        self.counter_label.config(text=f"Total bets: {format(self.counter, ',')} | Total cost: {format(self.total_cost, ',')} GP\nSets of {self.set_limit}: {format(self.sets, ',')} | Profit: {format(self.profit, ',')} GP | Odds: {format(self.odds, '.2f')}%")
 
 
     def increment_counter(self):
         self.counter += 1
         self.total_cost += self.bet
         self.profit = self.bet * self.payout - self.total_cost
-
+        self.probability = 1 - ((36/37) ** (self.counter + 1))
+        self.odds = 100 * self.probability
+        
         if self.counter % self.set_limit == 0:
             self.sets += 1
             self.bet *= self.bet_modifier
         
         self.update_counter_label()
         self.increment_button.config(text=f"Bet: {format(self.bet, ',')} GP")
-
+    
     
 
 def main():
@@ -145,3 +164,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
