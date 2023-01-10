@@ -29,12 +29,13 @@ class OverlayWindow:
         self.bet = self.starting_bet
         self.total_cost = 0
         self.profit = 0
+        self.odds = 2.7
         # Create a frame to hold the button and counter
         self.frame = tk.Frame(self.root)
         self.frame.pack()
 
         # Create a label to display the total bets
-        self.counter_label = tk.Label(self.frame, text="Total bets: 0 | Total cost: 0 GP\nSets: 0 | Profit: 0 GP")
+        self.counter_label = tk.Label(self.frame, text="Total bets: 0    |    Total cost: 0 GP\nSets: 0 | Profit: 0 GP | Odds: {:.2f}%".format(self.odds))
         self.counter_label.pack()
 
         # Create a button and displays the value of the bet variable
@@ -55,11 +56,36 @@ class OverlayWindow:
 
         # Add a button to Donate
         self.donate_button = tk.Button(self.button_frame, text="Donate", command=self.open_donate_window)
-        self.donate_button.pack(side='right')
+        self.donate_button.pack(side='left')
+
+        # Add a button to open a table of odds, total cost, and profit
+        self.table_button = tk.Button(self.button_frame, text="Table", command=self.open_table_window)
+        self.table_button.pack(side='left')
+
+    def open_table_window(self):
+        # Create a new top-level window
+        self.table_window = tk.Toplevel(self.root)
+        self.table_window.geometry("300x500+400+150")
+
+        # display a table of odds, total cost, and profit for 200 bets
+        tk.Label(self.table_window, text="Bets  |        Total Cost        |          Profit             |   Odds").pack()
+
+        self.listbox = tk.Listbox(self.table_window)
+        self.listbox.pack(expand=True, fill='both')
+        for i in range(200):
+            self.increment_counter()
+            self.listbox.insert(tk.END, f"  {self.counter:03}   |    {format(self.total_cost, ','):>14}    |    {format(self.profit, ','):>14}    |    {format(self.odds, '.2f'):>5}%")
+
+        scrollbar = tk.Scrollbar(self.table_window)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        scrollbar.config(command=self.listbox.yview)
+        self.listbox.config(yscrollcommand=scrollbar.set)
+       
 
     def open_donate_window(self):
         # Create a new top-level window
         self.donate_window = tk.Toplevel(self.root)
+        self.donate_window.geometry("400x140+400+200")
 
         tk.Label(self.donate_window, text="Your success with this tool is a testament to its value.\nIf you'd like to support the developer and help continue to improve and create great products,\nplease consider donating through one of these options.").pack()
         tk.Label(self.donate_window, text="Paypal:").pack()
@@ -71,6 +97,7 @@ class OverlayWindow:
     def open_settings_window(self):
         # Create a new top-level window
         self.settings_window = tk.Toplevel(self.root)
+        self.settings_window.geometry("300x250+400+200")
 
 
         # Add a label and text entry widget for the payout value with a default value of 36
@@ -100,7 +127,7 @@ class OverlayWindow:
 
         # Add a label to the settings window
         # Add a label to the settings window
-        tk.Label(self.settings_window, text=f"Set limit 1 - {round(self.max_set_limit)}\n1 is agressive raising after every bet.\ndefault 16 to take it slow and steady.\nmake sure you can afford to lose well over 100 bets in a row.").pack()
+        tk.Label(self.settings_window, text=f"Set limit 1 - {round(self.max_set_limit)}\n1 is agressive raising after every bet.\nrecommended to stay between 1-18").pack()
 
 
 
@@ -137,14 +164,14 @@ class OverlayWindow:
 
 
     def update_counter_label(self):
-        self.counter_label.config(text=f"Total bets: {format(self.counter, ',')} | Total cost: {format(self.total_cost, ',')} GP\nSets of {self.set_limit}: {format(self.sets, ',')} | Profit: {format(self.profit, ',')} GP | Odds: {format(self.odds, '.2f')}%")
+        self.counter_label.config(text=f"Total bets: {format(self.counter, ',')}     |     Total cost: {format(self.total_cost, ',')} GP\nSets of {self.set_limit}: {format(self.sets, ',')} | Profit: {format(self.profit, ',')} GP | Odds: {format(self.odds, '.2f')}%")
 
 
     def increment_counter(self):
         self.counter += 1
         self.total_cost += self.bet
         self.profit = self.bet * self.payout - self.total_cost
-        self.probability = 1 - ((36/37) ** (self.counter + 1))
+        self.probability = 1 - ((36/37) ** (self.counter))
         self.odds = 100 * self.probability
         
         if self.counter % self.set_limit == 0:
