@@ -111,6 +111,14 @@ class OverlayWindow:
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         scrollbar.config(command=self.listbox.yview)
         self.listbox.config(yscrollcommand=scrollbar.set)
+
+        # subtract 200 from counter and update the label on close
+        self.table_window.protocol("WM_DELETE_WINDOW", self.close_table_window)
+
+    def close_table_window(self):
+        self.counter -= 200
+        self.update_counter_label()
+        self.table_window.destroy()    
        
 
     def open_donate_window(self):
@@ -251,6 +259,7 @@ class OverlayWindow:
         self.update_counter_label()
     
     
+    
 
 def main():
     root = tk.Tk()
@@ -260,3 +269,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
