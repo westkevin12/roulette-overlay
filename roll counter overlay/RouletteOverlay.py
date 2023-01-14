@@ -96,10 +96,11 @@ class OverlayWindow:
     def open_table_window(self):
         # Create a new top-level window
         self.table_window = tk.Toplevel(self.root)
-        self.table_window.geometry("300x500+400+150")
+        self.table_window.geometry("400x600+400+150")
 
         # display a table of odds, total cost, and profit for 200 bets
-        tk.Label(self.table_window, text="Bets  |        Total Cost        |          Profit             |   Odds").pack()
+        tk.Label(self.table_window, text="Bets   |         Total Cost       |                      Profit        |                         Odds         ", justify='left', anchor="w").pack()
+
 
         # set pretable values
         self.pretable_total_cost = self.total_cost
@@ -111,7 +112,13 @@ class OverlayWindow:
         self.listbox.pack(expand=True, fill='both')
         for i in range(200):
             self.increment_counter()
-            self.listbox.insert(tk.END, f"  {self.counter:03}   |    {format(self.total_cost, ','):>14}    |    {format(self.profit, ','):>14}    |    {format(self.odds, '.2f'):>5}%")
+            if self.active_currency.get() == "GP":
+                self.listbox.insert(tk.END, f"  {self.counter:03} | {format(self.total_cost, ','):>30} | {format(self.profit, ','):>30} | {format(self.odds, '.2f'):>24}%")
+            elif self.active_currency.get() == "$":
+                self.listbox.insert(tk.END, f"  {self.counter:03} | {format(self.total_cost, ',.2f'):>30} | {format(self.profit, ',.2f'):>30} | {format(self.odds, '.2f'):>24}%")
+            elif self.active_currency.get() == "crypto":
+                self.listbox.insert(tk.END, f"  {self.counter:03} | {format(self.total_cost, ',.5f'):>30} | {format(self.profit, ',.5f'):>30} | {format(self.odds, '.2f'):>24}%")
+            
 
         scrollbar = tk.Scrollbar(self.table_window)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -274,10 +281,20 @@ class OverlayWindow:
 def main():
     root = tk.Tk()
     root.attributes("-topmost", True)
+    root.title("Roulette Overlay")
+    screen_height = root.winfo_screenheight()
+    screen_width = root.winfo_screenwidth()
+
+    if screen_height > 1080 and screen_width > 1920:
+        icon_path = "./icons/icon128X128.ico"
+    elif screen_height > 720 and screen_width > 1280:
+        icon_path = "./icons/icon64X64.ico"
+    else:
+        icon_path = "./icons/icon32X32.ico"
+
+    root.iconbitmap(icon_path)
     app = OverlayWindow(root)
     root.mainloop()
 
 if __name__ == "__main__":
     main()
-
-
