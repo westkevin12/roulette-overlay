@@ -101,6 +101,11 @@ class OverlayWindow:
         # display a table of odds, total cost, and profit for 200 bets
         tk.Label(self.table_window, text="Bets  |        Total Cost        |          Profit             |   Odds").pack()
 
+        # set pretable values
+        self.pretable_total_cost = self.total_cost
+        self.pretable_profit = self.profit
+        self.pretable_bet = self.bet
+
         self.listbox = tk.Listbox(self.table_window)
         self.listbox.pack(expand=True, fill='both')
         for i in range(200):
@@ -117,6 +122,9 @@ class OverlayWindow:
 
     def close_table_window(self):
         self.counter -= 200
+        self.total_cost = self.pretable_total_cost
+        self.profit = self.pretable_profit
+        self.bet = self.pretable_bet
         self.update_counter_label()
         self.table_window.destroy()    
        
