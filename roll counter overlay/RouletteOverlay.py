@@ -105,6 +105,7 @@ class OverlayWindow:
         self.pretable_total_cost = self.total_cost
         self.pretable_profit = self.profit
         self.pretable_bet = self.bet
+        self.pretable_odds = self.odds
 
         self.listbox = tk.Listbox(self.table_window)
         self.listbox.pack(expand=True, fill='both')
@@ -125,6 +126,7 @@ class OverlayWindow:
         self.total_cost = self.pretable_total_cost
         self.profit = self.pretable_profit
         self.bet = self.pretable_bet
+        self.odds = self.pretable_odds
         self.update_counter_label()
         self.table_window.destroy()    
        
@@ -277,4 +279,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
