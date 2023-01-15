@@ -25,7 +25,7 @@ class OverlayWindow:
         self.sets = 0
         self.max_set_limit = self.payout * 0.5
         self.min_set_limit = 1
-        self.set_limit = 16
+        self.set_limit = int(self.max_set_limit * 0.9)
         self.starting_bet = 50000
         self.bet = self.starting_bet
         self.total_cost = 0
@@ -107,6 +107,7 @@ class OverlayWindow:
         self.pretable_profit = self.profit
         self.pretable_bet = self.bet
         self.pretable_odds = self.odds
+        self.pretable_sets = self.sets
 
         self.listbox = tk.Listbox(self.table_window)
         self.listbox.pack(expand=True, fill='both')
@@ -134,6 +135,7 @@ class OverlayWindow:
         self.profit = self.pretable_profit
         self.bet = self.pretable_bet
         self.odds = self.pretable_odds
+        self.sets = self.pretable_sets
         self.update_counter_label()
         self.table_window.destroy()    
        
@@ -154,12 +156,19 @@ class OverlayWindow:
         # Create a new top-level window
         self.settings_window = tk.Toplevel(self.root)
         self.settings_window.geometry("300x250+400+200")
+        
+        # set presettings values
+        self.presettings_payout = self.payout
+        self.presettings_bet_modifier = self.bet_modifier
+        self.presettings_starting_bet = self.starting_bet
 
 
+        
         # Add a label and text entry widget for the payout value with a default value of 36
         tk.Label(self.settings_window, text="Payout:").pack()
         self.payout_entry = tk.Entry(self.settings_window)
-        self.payout_entry.insert(0, "36")
+        self.payout_entry.insert(0, str(round(self.payout)))
+        self.payout_entry.bind("<FocusOut>", self.update_set_limit)
         self.payout_entry.pack()
 
 
@@ -183,17 +192,28 @@ class OverlayWindow:
         # Add a label and text entry widget for the set limit value
         tk.Label(self.settings_window, text="Set limit:").pack()
         self.set_limit_entry = tk.Entry(self.settings_window)
-        self.set_limit_entry.insert(0, "16")
+        self.set_limit_entry.insert(0, str(round(self.set_limit)))
         self.set_limit_entry.pack()
 
         # Add a label to the settings window
-        tk.Label(self.settings_window, text=f"Set limit 1 - {round(self.max_set_limit)}\n1 is agressive raising after every bet.\nrecommended to stay between 1-{round(self.max_set_limit)}").pack()
+        self.recommended_label = tk.Label(self.settings_window, text=f"Set limit 1 - {round(self.max_set_limit)}\n1 is agressive raising after every bet.\nrecommended to stay between 1-{round(self.max_set_limit)}")
+        self.recommended_label.pack()
 
 
 
         # Add a button to close the window and update the relevant variables
         tk.Button(self.settings_window, text="Save", command=self.close_settings_window).pack()
 
+    def update_set_limit(self, *args):
+        
+        self.payout = int(self.payout_entry.get())
+        self.max_set_limit = self.payout * 0.5
+        self.set_limit = int(self.max_set_limit * 0.9)
+        self.set_limit_entry.delete(0,tk.END)
+        self.set_limit_entry.insert(0, int(self.set_limit))
+        self.recommended_label.config(text=f"Set limit 1 - {int(self.max_set_limit)}\n1 is agressive raising after every bet.\nrecommended to stay between 1-{int(self.max_set_limit)}")
+       
+        
     def switch_currency(self):
         if self.active_currency.get() == "GP":
             self.starting_bet = int(50000)
@@ -220,14 +240,19 @@ class OverlayWindow:
         self.payout = int(self.payout_entry.get())
         self.set_limit = int(self.set_limit_entry.get())
         self.bet_modifier = float(self.bet_modifier_entry.get())
-        
-        # Update the max set limit
-        self.max_set_limit = self.payout * 0.5
-    
-        self.reset_counter()
 
-        # Close the settings window
-        self.settings_window.destroy()
+        if self.payout == self.presettings_payout and self.bet_modifier == self.presettings_bet_modifier and self.starting_bet == self.presettings_starting_bet:
+            self.settings_window.destroy()
+            return
+        else:
+
+            self.update_set_limit()
+            
+    
+            self.reset_counter()
+
+            # Close the settings window
+            self.settings_window.destroy()
 
 
 
