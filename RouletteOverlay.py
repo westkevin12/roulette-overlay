@@ -30,7 +30,8 @@ class OverlayWindow:
         self.bet = self.starting_bet
         self.total_cost = 0
         self.profit = 0
-        self.odds = 2.7
+        self.probability = 1 - ((self.payout/(self.payout + 1)) ** (self.counter))
+        self.odds = 100 * self.probability
         # Create a frame to hold the button and counter
         self.frame = tk.Frame(self.root)
         self.frame.pack()
@@ -222,7 +223,7 @@ class OverlayWindow:
         elif self.active_currency.get() == "crypto":
             self.starting_bet = float(0.0000100000000000)
     
-        self.payout = int(36)
+        
         self.set_limit = int(self.set_limit)
         self.bet_modifier = float(self.bet_modifier)
     
@@ -262,7 +263,8 @@ class OverlayWindow:
         self.bet = self.starting_bet
         self.total_cost = 0
         self.profit = 0
-        self.odds = 2.7
+        self.probability = 1 - ((self.payout/(self.payout + 1)) ** (self.counter))
+        self.odds = 100 * self.probability
         self.update_counter_label()
 
         
@@ -291,7 +293,7 @@ class OverlayWindow:
             self.total_cost = float(self.total_cost + self.bet)
             self.profit = float(self.bet * self.payout - self.total_cost)
 
-        self.probability = 1 - ((36/37) ** (self.counter))
+        self.probability = 1 - ((self.payout/(self.payout + 1)) ** (self.counter))
         self.odds = 100 * self.probability
         
         if self.counter % self.set_limit == 0:
@@ -323,3 +325,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
