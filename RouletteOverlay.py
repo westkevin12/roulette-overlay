@@ -87,7 +87,7 @@ class OverlayWindow:
         elif self.active_currency.get() == "crypto":
             self.total_cost = tk.DoubleVar()
             self.starting_bet = tk.DoubleVar()
-            self.starting_bet.set(0.00001)
+            self.starting_bet.set(0.00000500)
             self.switch_currency()
             
         
@@ -119,7 +119,7 @@ class OverlayWindow:
             elif self.active_currency.get() == "$":
                 self.listbox.insert(tk.END, f"  {self.counter:03} | {format(self.total_cost, ',.2f'):>30} | {format(self.profit, ',.2f'):>30} | {format(self.odds, '.2f'):>24}%")
             elif self.active_currency.get() == "crypto":
-                self.listbox.insert(tk.END, f"  {self.counter:03} | {format(self.total_cost, ',.5f'):>30} | {format(self.profit, ',.5f'):>30} | {format(self.odds, '.2f'):>24}%")
+                self.listbox.insert(tk.END, f"  {self.counter:03} | {format(self.total_cost, ',.8f'):>30} | {format(self.profit, ',.8f'):>30} | {format(self.odds, '.2f'):>24}%")
             
 
         scrollbar = tk.Scrollbar(self.table_window)
@@ -187,7 +187,7 @@ class OverlayWindow:
         elif self.active_currency.get() == "$":
             self.starting_bet_entry.insert(0, "0.01")
         elif self.active_currency.get() == "crypto":
-            self.starting_bet_entry.insert(0, "0.0000100000000000")
+            self.starting_bet_entry.insert(0, "0.00000500")
         self.starting_bet_entry.pack()
 
         # Add a label and text entry widget for the set limit value
@@ -221,7 +221,7 @@ class OverlayWindow:
         elif self.active_currency.get() == "$":
             self.starting_bet = float(0.01)
         elif self.active_currency.get() == "crypto":
-            self.starting_bet = float(0.0000100000000000)
+            self.starting_bet = float(0.00000500)
     
         
         self.set_limit = int(self.set_limit)
@@ -274,14 +274,14 @@ class OverlayWindow:
 
     def update_counter_label(self):
         if self.active_currency.get() == "GP":
-            self.counter_label.config(text=f"Total bets: {format(self.counter, ',')}     |     Total cost: {format(self.total_cost, ',')} GP\nSets of {self.set_limit}: {format(self.sets, ',')} | Profit: {format(self.profit, ',')} GP | Odds: {format(self.odds, '.2f')}%")
+            self.counter_label.config(text=f"Total bets: {format(self.counter, ',')}     |     Total cost: {format(int(self.total_cost), ',')} GP\nSets of {self.set_limit}: {format(self.sets, ',')} | Profit: {format(int(self.profit), ',')} GP | Odds: {format(self.odds, '.2f')}%")
             self.increment_button.config(text=f"Bet: {format(self.bet, ',')} GP")
         elif self.active_currency.get() == "$":
             self.counter_label.config(text=f"Total bets: {format(self.counter, ',')}     |     Total cost: ${format(self.total_cost, ',.2f')}\nSets of {self.set_limit}: {format(self.sets, ',')} | Profit: ${format(self.profit, ',.2f')} | Odds: {format(self.odds, '.2f')}%")
             self.increment_button.config(text=f"Bet: ${format(self.bet, ',.2f')}")
         elif self.active_currency.get() == "crypto":
-            self.counter_label.config(text=f"Total bets: {format(self.counter, ',')}     |     Total cost: Ξ{format(self.total_cost, ',.16f')}\nSets of {self.set_limit}: {format(self.sets, ',')} | Profit: Ξ{format(self.profit, ',.16f')} | Odds: {format(self.odds, '.2f')}%")
-            self.increment_button.config(text=f"Bet: Ξ{format(self.bet, ',.16f')}")
+            self.counter_label.config(text=f"Total bets: {format(self.counter, ',')}     |     Total cost: Ξ{format(self.total_cost, ',.8f')}\nSets of {self.set_limit}: {format(self.sets, ',')} | Profit: Ξ{format(self.profit, ',.8f')} | Odds: {format(self.odds, '.2f')}%")
+            self.increment_button.config(text=f"Bet: Ξ{format(self.bet, ',.8f')}")
 
 
     def increment_counter(self):
@@ -325,4 +325,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
