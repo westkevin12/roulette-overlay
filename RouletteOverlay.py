@@ -157,13 +157,23 @@ class OverlayWindow:
     def open_donate_window(self):
         # Create a new top-level window
         self.donate_window = tk.Toplevel(self.root)
-        self.donate_window.geometry("400x140+400+200")
+        self.donate_window.geometry("400x250+400+200")
 
-        tk.Label(self.donate_window, text="Your success with this tool is a testament to its value.\nIf you'd like to support the developer and help continue to improve and create great products,\nplease consider donating through one of these options.").pack()
-        tk.Label(self.donate_window, text="Paypal:").pack()
-        tk.Label(self.donate_window, text="https://paypal.me/XvGwest").pack()
-        tk.Label(self.donate_window, text="ETH:").pack()
-        tk.Label(self.donate_window, text="0x712ac061FCDAC3b7861D367D3bF995d814775F66").pack()
+        tk.Label(self.donate_window, text="Your success with this tool is a testament to its value.\nIf you'd like to support the developer and help continue to improve and create great products,\nplease consider donating through one of these options.").pack(pady=10)
+        tk.Label(self.donate_window, text="Paypal:", font=("Arial", 10, "bold")).pack()
+        tk.Label(self.donate_window, text="https://paypal.me/XvGwest").pack(pady=(0, 10))
+        tk.Label(self.donate_window, text="Ethereum (ETH):", font=("Arial", 10, "bold")).pack()
+        eth_address = "0x43cb5d83fAac0590e19c4BE5Af270c08598d7aa9"
+        tk.Label(self.donate_window, text=eth_address).pack()
+        
+        # Copy button
+        tk.Button(self.donate_window, text="Copy Address", command=self.copy_eth_address).pack(pady=5)
+    
+    def copy_eth_address(self):
+        address = "0x43cb5d83fAac0590e19c4BE5Af270c08598d7aa9"
+        self.root.clipboard_clear()
+        self.root.clipboard_append(address)
+        self.root.update()
 
 
     def open_settings_window(self):

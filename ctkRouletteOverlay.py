@@ -1,4 +1,5 @@
 import customtkinter as tk
+import tkinter
 #from tkinter import ttk
 """
 Copyright (C) 2023 eXtremeVisionGaming # EMAIL: west@extremevisiongaming.com
@@ -166,14 +167,34 @@ class OverlayWindow:
     def open_donate_window(self):
         # Create a new top-level window
         self.donate_window = tk.CTkToplevel(self.root)
-        self.donate_window.geometry("550x170+400+200")
+        self.donate_window.geometry("550x450+400+200")
         self.donate_window.title("Donate")
 
-        tk.CTkLabel(self.donate_window, text="Your success with this tool is a testament to its value.\nIf you'd like to support the developer and help continue to improve and create great products,\nplease consider donating through one of these options.").pack()
-        tk.CTkLabel(self.donate_window, text="Paypal:").pack()
-        tk.CTkLabel(self.donate_window, text="https://paypal.me/XvGwest").pack()
-        tk.CTkLabel(self.donate_window, text="ETH:").pack()
-        tk.CTkLabel(self.donate_window, text="0x712ac061FCDAC3b7861D367D3bF995d814775F66").pack()
+        tk.CTkLabel(self.donate_window, text="If you'd like to support the developer and help continue to improve and create great products,\nplease consider donating through one of these options.").pack(pady=10)
+        
+        tk.CTkLabel(self.donate_window, text="Paypal:", font=("Arial", 16, "bold")).pack()
+        tk.CTkLabel(self.donate_window, text="https://paypal.me/XvGwest").pack(pady=(0, 10))
+        
+        tk.CTkLabel(self.donate_window, text="Ethereum (ETH):", font=("Arial", 16, "bold")).pack()
+        eth_address = "0x43cb5d83fAac0590e19c4BE5Af270c08598d7aa9"
+        tk.CTkLabel(self.donate_window, text=eth_address).pack()
+        
+        # Copy button
+        tk.CTkButton(self.donate_window, text="Copy Address", command=self.copy_eth_address).pack(pady=5)
+
+        # QR Code
+        qr_path = resource_path("icons/pay-west-eth.gif")
+        if os.path.exists(qr_path):
+            self.qr_image = tkinter.PhotoImage(file=qr_path)
+            # Use a standard tkinter label for the GIF to avoid PIL dependency
+            qr_label = tkinter.Label(self.donate_window, image=self.qr_image, bg="#2b2b2b") # Matching CTk dark background
+            qr_label.pack(pady=10)
+    
+    def copy_eth_address(self):
+        address = "0x43cb5d83fAac0590e19c4BE5Af270c08598d7aa9"
+        self.root.clipboard_clear()
+        self.root.clipboard_append(address)
+        self.root.update()
 
 
     def open_settings_window(self):
