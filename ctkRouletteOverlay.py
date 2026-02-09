@@ -16,6 +16,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>."""
 
+import sys
+import os
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 class OverlayWindow:
     def __init__(self, root):
         self.root = root
@@ -327,11 +340,11 @@ def main():
 
 
     if screen_height > 1080 and screen_width > 1920:
-        icon_path = "./icons/icon128X128.ico"
+        icon_path = resource_path("icons/icon128X128.ico")
     elif screen_height > 720 and screen_width > 1280:
-        icon_path = "./icons/icon64X64.ico"
+        icon_path = resource_path("icons/icon64X64.ico")
     else:
-        icon_path = "./icons/icon32X32.ico"
+        icon_path = resource_path("icons/icon32X32.ico")
 
     root.iconbitmap(icon_path)
     app = OverlayWindow(root)
