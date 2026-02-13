@@ -1,0 +1,10 @@
+[project]
+name = "roulette-overlay"
+version = "0.1.0"
+description = "A lightweight, Always on Top betting tracker and strategy tool for Roulette. Features automated stake calculation, streak tracking, and profit analysis across multiple currencies (Fiat, Crypto, and GP). Built with Python and CustomTkinter for a modern overlay experience."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "customtkinter>=5.2.2",
+    "pillow>=12.1.1",
+]

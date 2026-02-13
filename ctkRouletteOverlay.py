@@ -367,7 +367,17 @@ def main():
     else:
         icon_path = resource_path("icons/icon32X32.ico")
 
-    root.iconbitmap(icon_path)
+    # root.iconbitmap(icon_path)
+    try:
+        from PIL import Image, ImageTk
+        root.wm_iconphoto(True, ImageTk.PhotoImage(Image.open(icon_path)))
+    except ImportError:
+        try:
+            root.iconbitmap(icon_path)
+        except:
+            pass
+    except Exception as e:
+        print(f"Warning: Could not load icon: {e}")
     app = OverlayWindow(root)
     root.mainloop()
 
